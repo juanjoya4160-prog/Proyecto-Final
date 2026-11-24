@@ -3,6 +3,8 @@ services:
     name: cards4play-api
     runtime: docker
     plan: free
+    rootDir: proyectoJoya
+    healthCheckPath: /
     envVars:
       - key: TASA_DEFECTO
         value: "4000"
