@@ -1,0 +1,17 @@
+services:
+  cards4play-api:
+    build: .
+    image: cards4play-api:latest
+    container_name: cards4play
+    ports:
+      - "4567:4567"
+    environment:
+      PORT: "4567"
+      DATA_FILE: /data/cards4play.json
+      TASA_DEFECTO: "4000"
+    volumes:
+      - cards4play-data:/data
+    restart: unless-stopped
+
+volumes:
+  cards4play-data:

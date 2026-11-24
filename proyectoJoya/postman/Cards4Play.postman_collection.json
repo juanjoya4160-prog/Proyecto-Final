@@ -1,0 +1,30 @@
+{
+  "info": {"name": "Cards4Play API", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},
+  "variable": [
+    {"key":"baseUrl","value":"http://localhost:4567"},
+    {"key":"username","value":"admin"},
+    {"key":"password","value":"admin123"},
+    {"key":"clientUser","value":"cliente1"},
+    {"key":"clientPassword","value":"clave123"},
+    {"key":"cardId","value":""}, {"key":"boosterId","value":""}, {"key":"tournamentId","value":""}
+  ],
+  "item": [
+    {"name":"Estado","request":{"method":"GET","url":"{{baseUrl}}/"}},
+    {"name":"Login administrador","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"username\":\"{{username}}\",\"password\":\"{{password}}\"}"},"url":"{{baseUrl}}/auth/login"}},
+    {"name":"Crear cliente (ADMIN)","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"},{"key":"X-Username","value":"{{username}}"},{"key":"X-Password","value":"{{password}}"}],"body":{"mode":"raw","raw":"{\"username\":\"{{clientUser}}\",\"password\":\"{{clientPassword}}\"}"},"url":"{{baseUrl}}/clients"}},
+    {"name":"Crear carta rara (ADMIN)","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"},{"key":"X-Username","value":"{{username}}"},{"key":"X-Password","value":"{{password}}"}],"body":{"mode":"raw","raw":"{\"name\":\"Carta de prueba\",\"rarity\":\"R\",\"priceUsd\":2.5}"},"url":"{{baseUrl}}/cards"}},
+    {"name":"Listar cartas en COP","request":{"method":"GET","header":[{"key":"X-Username","value":"{{username}}"},{"key":"X-Password","value":"{{password}}"}],"url":"{{baseUrl}}/cards"}},
+    {"name":"Crear sellado (ADMIN)","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"},{"key":"X-Username","value":"{{username}}"},{"key":"X-Password","value":"{{password}}"}],"body":{"mode":"raw","raw":"{\"name\":\"Caja TCG\",\"priceUsd\":20}"},"url":"{{baseUrl}}/products/sealed"}},
+    {"name":"Crear accesorio (ADMIN)","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"},{"key":"X-Username","value":"{{username}}"},{"key":"X-Password","value":"{{password}}"}],"body":{"mode":"raw","raw":"{\"name\":\"Fundas\",\"priceUsd\":5}"},"url":"{{baseUrl}}/products/accessories"}},
+    {"name":"Crear booster (ADMIN)","event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.collectionVariables.set('boosterId', pm.response.json().id);"]}}],"request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"},{"key":"X-Username","value":"{{username}}"},{"key":"X-Password","value":"{{password}}"}],"body":{"mode":"raw","raw":"{\"name\":\"Booster prueba\",\"priceUsd\":5}"},"url":"{{baseUrl}}/boosters"}},
+    {"name":"Listar boosters (contenido oculto)","request":{"method":"GET","header":[{"key":"X-Username","value":"{{username}}"},{"key":"X-Password","value":"{{password}}"}],"url":"{{baseUrl}}/boosters"}},
+    {"name":"Crear torneo (ADMIN)","event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.collectionVariables.set('tournamentId', pm.response.json().id);"]}}],"request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"},{"key":"X-Username","value":"{{username}}"},{"key":"X-Password","value":"{{password}}"}],"body":{"mode":"raw","raw":"{\"name\":\"Torneo semanal\",\"date\":\"2026-12-01\",\"capacity\":16}"},"url":"{{baseUrl}}/tournaments"}},
+    {"name":"Inscribirse a torneo (CLIENT)","request":{"method":"POST","header":[{"key":"X-Username","value":"{{clientUser}}"},{"key":"X-Password","value":"{{clientPassword}}"}],"url":"{{baseUrl}}/tournaments/{{tournamentId}}/register"}},
+    {"name":"Comprar booster (CLIENT)","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"},{"key":"X-Username","value":"{{clientUser}}"},{"key":"X-Password","value":"{{clientPassword}}"}],"body":{"mode":"raw","raw":"{\"productId\":\"{{boosterId}}\"}"},"url":"{{baseUrl}}/purchases"}},
+    {"name":"Abrir booster propio (CLIENT)","request":{"method":"POST","header":[{"key":"X-Username","value":"{{clientUser}}"},{"key":"X-Password","value":"{{clientPassword}}"}],"url":"{{baseUrl}}/boosters/{{boosterId}}/open"}},
+    {"name":"Consultar historial (CLIENT)","request":{"method":"GET","header":[{"key":"X-Username","value":"{{clientUser}}"},{"key":"X-Password","value":"{{clientPassword}}"}],"url":"{{baseUrl}}/purchases"}},
+    {"name":"Error: login inválido (401)","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"username\":\"nadie\",\"password\":\"incorrecta\"}"},"url":"{{baseUrl}}/auth/login"}},
+    {"name":"Error: sin autenticación (401)","request":{"method":"GET","url":"{{baseUrl}}/boosters"}},
+    {"name":"Error: ruta inexistente (404)","request":{"method":"GET","header":[{"key":"X-Username","value":"{{username}}"},{"key":"X-Password","value":"{{password}}"}],"url":"{{baseUrl}}/boosters/no-existe"}}
+  ]
+}
